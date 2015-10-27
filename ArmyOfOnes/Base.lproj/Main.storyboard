@@ -84,6 +84,7 @@
                                 <animations/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <color key="tintColor" red="0.22352941179999999" green="0.52156862749999999" blue="0.45882352939999999" alpha="1" colorSpace="calibratedRGB"/>
+                                <accessibility key="accessibilityConfiguration" identifier="amountTextField" label="amountTextField"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="95" id="nNV-mR-zen"/>
                                 </constraints>

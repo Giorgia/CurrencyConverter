@@ -51,7 +51,6 @@ class CurrencyAPI {
        
         Alamofire.request(.GET, currencyPath, parameters: ["amount": amount])
             .responseObject { (conversion: Conversion?, error) -> Void in
-                
                 if let c = conversion, m = c.message where !c.success {
                    completion(c, Error.errorWithCode(1000, failureReason: m))
                 }

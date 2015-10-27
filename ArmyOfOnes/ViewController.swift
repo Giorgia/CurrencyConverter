@@ -22,7 +22,7 @@ class ViewController: UIViewController, UITableViewDataSource {
     @IBOutlet weak var textField: UITextField!
     
     let currencies  = [Currency.UK, Currency.EU, Currency.JP, Currency.BZ]
-    var conversions: [Conversion?]?
+    var conversions = [Conversion?]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,9 +33,13 @@ class ViewController: UIViewController, UITableViewDataSource {
     
     func loadUSDConversion(target: Currency, amount: Int) {
         CurrencyAPI.convertion(from: .US, to: target, amount: amount, completion: { (conversion, error) -> Void in
-            guard
-                let index = self.currencies.indexOf(target) else { return }
-            self.conversions?[index] = conversion
+            
+            if let e = error as? NSError {
+                self.showAlert("Oops..", message: e.localizedDescription)
+            }
+            guard let index = self.currencies.indexOf(target) else { return }
+            self.conversions[index] = conversion
+            
             self.tableView.reloadRowsAtIndexPaths([NSIndexPath(forItem: index, inSection: 0)], withRowAnimation: UITableViewRowAnimation.None)
         })
     }
@@ -45,9 +49,10 @@ class ViewController: UIViewController, UITableViewDataSource {
             loadUSDConversion(c, amount: amount)
         }
     }
-
+    
     @IBAction func go() {
         textField.resignFirstResponder()
+        tableView.reloadData()
         if let text = textField.text, amount = Int(text) {
             reloadAllConversions(amount)
         }
@@ -66,7 +71,7 @@ class ViewController: UIViewController, UITableViewDataSource {
        
         guard
             let currencyCell    = cell as? CurrencyCell,
-            let conversion      = conversions?[indexPath.row],
+            let conversion      = conversions[indexPath.row],
             let target          = conversion.target,
             let amount          = conversion.amount,
             let currency        = Currency(rawValue: target)
@@ -74,10 +79,17 @@ class ViewController: UIViewController, UITableViewDataSource {
         
         currencyCell.symbolLabel.text = currency.flag
         currencyCell.amountLabel.text = "\(amount) \(currency.symbol)"
-    
+        
         return currencyCell
     }
     
+    func showAlert(title: String, message: String) {
+        let alert   = UIAlertController(title: title, message: message, preferredStyle: .Alert)
+        let ok      = UIAlertAction(title: "OK", style: .Default, handler: nil)
+        alert.addAction(ok)
+        presentViewController(alert, animated: true, completion: nil)
+    }
+
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.

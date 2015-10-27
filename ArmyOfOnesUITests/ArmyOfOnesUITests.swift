@@ -21,6 +21,16 @@ class ArmyOfOnesUITests: XCTestCase {
         XCUIApplication().launch()
 
         // In UI tests it’s important to set the initial state - such as interface orientation - required for your tests before they run. The setUp method is a good place to do this.
+        
+        let app = XCUIApplication()
+        let amounttextfieldTextField = app.textFields["amountTextField"]
+        amounttextfieldTextField.tap()
+        
+        let deleteKey = app.keyboards.keys["Delete"]
+        deleteKey.tap()
+        amounttextfieldTextField.typeText("100")
+        app.buttons["GO"].tap()
+       
     }
     
     override func tearDown() {
