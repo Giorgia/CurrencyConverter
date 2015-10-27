@@ -19,13 +19,14 @@ class CurrencyCell: UITableViewCell {
 class ViewController: UIViewController, UITableViewDataSource {
 
     @IBOutlet weak var tableView: UITableView!
-
+    @IBOutlet weak var textField: UITextField!
+    
     let currencies  = [Currency.UK, Currency.EU, Currency.JP, Currency.BZ]
     var conversions: [Conversion?]?
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+
         conversions = [Conversion?](count:currencies.count, repeatedValue: nil)
         reloadAllConversions(1)
     }
@@ -46,7 +47,10 @@ class ViewController: UIViewController, UITableViewDataSource {
     }
 
     @IBAction func go() {
-        reloadAllConversions(2)
+        textField.resignFirstResponder()
+        if let text = textField.text, amount = Int(text) {
+            reloadAllConversions(amount)
+        }
     }
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
